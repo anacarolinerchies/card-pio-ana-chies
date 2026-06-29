@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ana Chies · Confeitaria Saudável</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --marrom:#6B3A2A;--marrom-escuro:#4A2518;--marrom-claro:#C8A882;
+    --verde:#4A5240;--verde-medio:#5C6650;--dourado:#B8976A;--dourado-claro:#D4B483;
+    --offwhite:#F9F5EF;--offwhite2:#F2EBE0;--texto:#2C1810;--texto-medio:#5A4030;
+    --borda:rgba(184,151,106,0.3);
+  }
+  body{font-family:'Jost',sans-serif;background:var(--offwhite);color:var(--texto);min-height:100vh;}
+  .serif{font-family:'Cormorant Garamond',serif;}
+  nav{background:var(--marrom-escuro);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;}
+  .nav-logo{font-family:'Cormorant Garamond',serif;color:var(--dourado-claro);font-size:22px;font-weight:300;letter-spacing:2px;}
+  .nav-links{display:flex;gap:2rem;list-style:none;}
+  .nav-links a{color:var(--offwhite);text-decoration:none;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;opacity:0.85;cursor:pointer;transition:opacity 0.2s;}
+  .nav-links a:hover{opacity:1;color:var(--dourado-claro);}
+  .admin-btn{background:transparent;border:1px solid var(--dourado);color:var(--dourado-claro);padding:6px 16px;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;transition:all 0.2s;}
+  .admin-btn:hover{background:var(--dourado);color:var(--marrom-escuro);}
+  .page{display:none;} .page.active{display:block;}
+  .aviso-bar{background:var(--verde);color:var(--offwhite);text-align:center;padding:10px;font-size:12px;letter-spacing:1px;}
+  .aviso-bar span{color:var(--dourado-claro);font-weight:500;}
+  .hero{background:linear-gradient(135deg,var(--marrom-escuro) 0%,var(--verde-medio) 100%);padding:80px 2rem;text-align:center;position:relative;overflow:hidden;}
+  .hero-badge{display:inline-block;border:1px solid var(--dourado);color:var(--dourado-claro);font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:6px 20px;margin-bottom:24px;}
+  .hero h1{font-family:'Cormorant Garamond',serif;font-size:58px;font-weight:300;color:var(--offwhite);line-height:1.1;margin-bottom:12px;}
+  .hero-sub{font-size:14px;color:var(--dourado-claro);letter-spacing:2px;margin-bottom:32px;font-weight:300;}
+  .hero-pills{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:40px;}
+  .pill{background:rgba(184,151,106,0.15);border:1px solid rgba(184,151,106,0.4);color:var(--dourado-claro);padding:6px 16px;font-size:11px;letter-spacing:1px;}
+  .hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+  .btn-primary{background:var(--dourado);color:var(--marrom-escuro);border:none;padding:14px 32px;font-family:'Jost',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-weight:500;transition:all 0.2s;}
+  .btn-primary:hover{background:var(--dourado-claro);}
+  .btn-outline{background:transparent;color:var(--offwhite);border:1px solid rgba(249,245,239,0.4);padding:14px 32px;font-family:'Jost',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
+  .btn-outline:hover{border-color:var(--offwhite);}
+  .section{max-width:900px;margin:0 auto;padding:60px 2rem;}
+  .section-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--marrom);text-align:center;margin-bottom:8px;}
+  .section-line{width:60px;height:1px;background:var(--dourado);margin:0 auto 40px;}
+  .categoria-titulo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:var(--marrom);margin-bottom:4px;display:flex;align-items:center;gap:12px;}
+  .categoria-titulo::after{content:'';flex:1;height:1px;background:var(--borda);}
+  .categoria-bloco{margin-bottom:48px;}
+  .produtos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:20px;}
+  .produto-card{background:white;border:1px solid var(--borda);cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;}
+  .produto-card:hover{border-color:var(--dourado);transform:translateY(-2px);}
+  .produto-foto{width:100%;height:180px;object-fit:cover;display:block;}
+  .produto-foto-placeholder{width:100%;height:180px;background:var(--offwhite2);display:flex;align-items:center;justify-content:center;color:var(--marrom-claro);font-size:36px;}
+  .produto-info{padding:16px;}
+  .produto-nome{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:500;color:var(--marrom-escuro);margin-bottom:4px;}
+  .produto-desc{font-size:12px;color:var(--texto-medio);line-height:1.6;margin-bottom:12px;min-height:36px;}
+  .produto-bottom{display:flex;align-items:center;justify-content:space-between;}
+  .produto-preco{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--marrom);}
+  .produto-preco span{font-size:13px;font-weight:300;}
+  .adicionar-btn{background:var(--marrom-escuro);color:white;border:none;padding:8px 16px;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;transition:background 0.2s;}
+  .adicionar-btn:hover{background:var(--verde);}
+  .vegano-badge{position:absolute;top:12px;right:12px;background:var(--verde);color:white;font-size:9px;letter-spacing:1px;padding:3px 8px;text-transform:uppercase;}
+  .carrinho-float{position:fixed;bottom:24px;right:24px;background:var(--marrom-escuro);color:white;border:1px solid var(--dourado);padding:14px 20px;display:flex;align-items:center;gap:10px;cursor:pointer;z-index:200;font-family:'Jost',sans-serif;font-size:12px;letter-spacing:1px;transition:all 0.2s;}
+  .carrinho-float:hover{background:var(--verde);}
+  .carrinho-count{background:var(--dourado);color:var(--marrom-escuro);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;}
+  .carrinho-item{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--borda);}
+  .carrinho-item-foto{width:52px;height:52px;object-fit:cover;border:1px solid var(--borda);margin-right:12px;flex-shrink:0;}
+  .carrinho-item-foto-ph{width:52px;height:52px;background:var(--offwhite2);display:flex;align-items:center;justify-content:center;font-size:20px;margin-right:12px;flex-shrink:0;}
+  .carrinho-item-info{flex:1;}
+  .carrinho-item-nome{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--marrom-escuro);margin-bottom:4px;}
+  .carrinho-item-preco{font-size:13px;color:var(--texto-medio);}
+  .qty-controls{display:flex;align-items:center;gap:10px;margin:0 16px;}
+  .qty-btn{width:28px;height:28px;border:1px solid var(--borda);background:white;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--marrom);transition:all 0.2s;}
+  .qty-btn:hover{background:var(--marrom);color:white;}
+  .remover-btn{background:none;border:none;color:#999;cursor:pointer;font-size:18px;padding:4px;transition:color 0.2s;}
+  .remover-btn:hover{color:#c0392b;}
+  .total-bar{background:var(--offwhite2);border:1px solid var(--borda);padding:20px 24px;margin:24px 0;display:flex;justify-content:space-between;align-items:center;}
+  .total-label{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--marrom);}
+  .total-valor{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;color:var(--marrom-escuro);}
+  .form-section{background:white;border:1px solid var(--borda);padding:28px;margin-bottom:24px;}
+  .form-title{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--marrom);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--borda);}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .form-group{display:flex;flex-direction:column;gap:6px;}
+  .form-group.full{grid-column:1/-1;}
+  .form-group label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--texto-medio);font-weight:500;}
+  .form-group input,.form-group select,.form-group textarea{border:1px solid var(--borda);padding:10px 12px;font-family:'Jost',sans-serif;font-size:14px;color:var(--texto);background:var(--offwhite);outline:none;transition:border-color 0.2s;}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--dourado);}
+  .form-group textarea{resize:vertical;min-height:80px;}
+  .pagamento-opcoes{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;}
+  .pag-opt{border:1px solid var(--borda);padding:10px 20px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:8px;transition:all 0.2s;background:white;color:var(--texto-medio);}
+  .pag-opt.selected{border-color:var(--marrom);background:var(--marrom);color:white;}
+  .info-box{background:var(--offwhite2);border-left:3px solid var(--dourado);padding:12px 16px;font-size:12px;color:var(--texto-medio);line-height:1.7;margin-bottom:16px;}
+  .prazo-aviso{background:var(--verde);color:white;padding:14px 20px;font-size:13px;display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+  .cuidados-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:20px;}
+  .cuidado-card{background:white;border:1px solid var(--borda);padding:20px;text-align:center;}
+  .cuidado-icon{font-size:28px;margin-bottom:10px;}
+  .cuidado-titulo{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--marrom);margin-bottom:6px;}
+  .cuidado-desc{font-size:12px;color:var(--texto-medio);line-height:1.6;}
+  .alergia-box{background:#FFF8F0;border:1px solid rgba(184,151,106,0.4);padding:20px 24px;margin-top:32px;font-size:13px;color:var(--texto-medio);line-height:1.8;}
+  .contato-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px;}
+  .contato-card{background:white;border:1px solid var(--borda);padding:28px;}
+  .contato-card h3{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--marrom);margin-bottom:16px;}
+  .contato-linha{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;font-size:13px;color:var(--texto-medio);line-height:1.5;}
+  .contato-icon{color:var(--dourado);font-size:16px;margin-top:1px;}
+  .admin-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;display:none;align-items:center;justify-content:center;}
+  .admin-overlay.open{display:flex;}
+  .admin-modal{background:var(--marrom-escuro);padding:40px;width:360px;text-align:center;}
+  .admin-modal h2{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--dourado-claro);margin-bottom:8px;}
+  .admin-modal p{font-size:12px;color:rgba(249,245,239,0.6);margin-bottom:28px;letter-spacing:1px;}
+  .admin-modal input{width:100%;background:rgba(249,245,239,0.1);border:1px solid rgba(184,151,106,0.4);color:white;padding:12px 16px;font-family:'Jost',sans-serif;font-size:14px;margin-bottom:12px;outline:none;}
+  .admin-modal input:focus{border-color:var(--dourado);}
+  .admin-modal input::placeholder{color:rgba(249,245,239,0.3);}
+  .admin-erro{color:#e74c3c;font-size:12px;margin-bottom:12px;}
+  .admin-header{background:var(--marrom-escuro);padding:20px 32px;display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;}
+  .admin-header h2{font-family:'Cormorant Garamond',serif;color:var(--dourado-claro);font-size:22px;font-weight:300;letter-spacing:2px;}
+  .admin-tabs{display:flex;gap:0;margin-bottom:28px;border-bottom:2px solid var(--borda);}
+  .admin-tab{padding:12px 24px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;color:var(--texto-medio);border:none;background:none;font-family:'Jost',sans-serif;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.2s;}
+  .admin-tab.active{color:var(--marrom);border-bottom-color:var(--marrom);}
+  .admin-content{display:none;} .admin-content.active{display:block;}
+  .produto-admin-card{background:white;border:1px solid var(--borda);padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;}
+  .produto-admin-foto{width:60px;height:60px;object-fit:cover;border:1px solid var(--borda);flex-shrink:0;}
+  .produto-admin-foto-ph{width:60px;height:60px;background:var(--offwhite2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:1px solid var(--borda);}
+  .produto-admin-info{flex:1;}
+  .produto-admin-nome{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--marrom-escuro);}
+  .produto-admin-cat{font-size:11px;color:var(--texto-medio);letter-spacing:1px;text-transform:uppercase;}
+  .produto-admin-preco{font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--marrom);margin-right:12px;}
+  .edit-btn{background:var(--dourado);color:var(--marrom-escuro);border:none;padding:7px 14px;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;margin-right:6px;}
+  .del-btn{background:transparent;color:#c0392b;border:1px solid #c0392b;padding:7px 10px;font-size:11px;cursor:pointer;font-family:'Jost',sans-serif;}
+  .del-btn:hover{background:#c0392b;color:white;}
+  .novo-produto-form{background:white;border:1px solid var(--borda);padding:28px;margin-bottom:24px;}
+  .upload-area{border:2px dashed var(--borda);padding:24px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--offwhite);position:relative;}
+  .upload-area:hover{border-color:var(--dourado);background:var(--offwhite2);}
+  .upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+  .upload-preview{width:100%;height:140px;object-fit:cover;display:block;margin-top:12px;border:1px solid var(--borda);}
+  .upload-label{font-size:12px;color:var(--texto-medio);letter-spacing:1px;}
+  .upload-icon{font-size:28px;margin-bottom:8px;}
+  .pedido-card{background:white;border:1px solid var(--borda);padding:20px;margin-bottom:12px;}
+  .pedido-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+  .pedido-nome{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--marrom-escuro);}
+  .pedido-status{font-size:11px;padding:4px 12px;letter-spacing:1px;text-transform:uppercase;}
+  .status-pendente{background:#FFF3CD;color:#856404;}
+  .status-confirmado{background:#D4EDDA;color:#155724;}
+  .pedido-itens{font-size:13px;color:var(--texto-medio);margin-bottom:8px;line-height:1.8;}
+  .pedido-data{font-size:12px;color:var(--dourado);margin-bottom:12px;}
+  .confirmar-btn{background:var(--verde);color:white;border:none;padding:8px 16px;font-size:11px;cursor:pointer;font-family:'Jost',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-right:8px;}
+  .edit-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:600;display:none;align-items:center;justify-content:center;}
+  .edit-modal-overlay.open{display:flex;}
+  .edit-modal{background:white;padding:32px;width:480px;border-top:3px solid var(--dourado);max-height:90vh;overflow-y:auto;}
+  .edit-modal h3{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--marrom);margin-bottom:20px;}
+  .edit-modal-grupo{margin-bottom:14px;}
+  .edit-modal-grupo label{display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--texto-medio);margin-bottom:6px;}
+  .edit-modal-grupo input,.edit-modal-grupo select,.edit-modal-grupo textarea{width:100%;border:1px solid var(--borda);padding:10px 12px;font-family:'Jost',sans-serif;font-size:14px;color:var(--texto);background:var(--offwhite);outline:none;}
+  .edit-modal-grupo input:focus,.edit-modal-grupo select:focus{border-color:var(--dourado);}
+  .edit-modal-grupo textarea{resize:vertical;min-height:70px;}
+  .edit-modal-actions{display:flex;gap:10px;margin-top:20px;}
+  .success-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--verde);color:white;padding:12px 24px;font-size:13px;letter-spacing:1px;z-index:700;opacity:0;transition:opacity 0.3s;pointer-events:none;}
+  .success-toast.show{opacity:1;}
+  .footer{background:var(--marrom-escuro);padding:40px 2rem;text-align:center;color:rgba(249,245,239,0.6);font-size:12px;letter-spacing:1px;}
+  .footer-logo{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--dourado-claro);font-weight:300;margin-bottom:8px;}
+  .footer-insta{color:var(--dourado-claro);text-decoration:none;font-size:12px;letter-spacing:2px;display:inline-block;margin-bottom:20px;border-bottom:1px solid var(--dourado);padding-bottom:2px;}
+  @media(max-width:600px){
+    .hero h1{font-size:36px;}
+    .form-grid{grid-template-columns:1fr;}
+    .contato-grid{grid-template-columns:1fr;}
+    .nav-links{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="success-toast" id="toast"></div>
+
+<nav>
+  <div class="nav-logo serif">Ana Chies</div>
+  <ul class="nav-links">
+    <li><a onclick="showPage('cardapio')">Cardápio</a></li>
+    <li><a onclick="showPage('cuidados')">Nossos Cuidados</a></li>
+    <li><a onclick="showPage('contato')">Contato</a></li>
+  </ul>
+  <button class="admin-btn" onclick="abrirAdmin()">Admin ⚙</button>
+</nav>
+
+<div class="aviso-bar" id="aviso-bar">
+  ✦ <span>Prazo mínimo: 1 dia de antecedência</span> · Para pronta entrega disponível hoje, consulte no WhatsApp ✦
+</div>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-badge">Confeitaria Saudável · Carlos Barbosa, RS</div>
+    <h1 class="serif">Ana Chies</h1>
+    <p class="hero-sub">Onde o amor vira receita</p>
+    <div class="hero-pills">
+      <span class="pill">Sem açúcar branco</span>
+      <span class="pill">Sem leite animal</span>
+      <span class="pill">Sem farinha de trigo</span>
+      <span class="pill">Opções veganas</span>
+      <span class="pill">Produção artesanal</span>
+    </div>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="showPage('cardapio')">Ver Cardápio</button>
+      <button class="btn-outline" onclick="showPage('cuidados')">Nossos Cuidados</button>
+    </div>
+  </div>
+  <div class="section">
+    <h2 class="section-title serif">Uma confeitaria com propósito</h2>
+    <div class="section-line"></div>
+    <p style="text-align:center;color:var(--texto-medio);line-height:1.9;max-width:600px;margin:0 auto;font-size:15px;">
+      Na Ana Chies, cada receita é preparada com cuidado e consciência. Priorizamos ingredientes naturais, produção artesanal e sabores que respeitam o verdadeiro potencial dos alimentos — porque doce de verdade une sabor, qualidade e propósito.
+    </p>
+    <div style="text-align:center;margin-top:32px;">
+      <button class="btn-primary" onclick="showPage('cardapio')">Fazer Meu Pedido</button>
+    </div>
+  </div>
+</div>
+
+<!-- CARDAPIO -->
+<div id="page-cardapio" class="page">
+  <div class="section"><h2 class="section-title serif">Cardápio</h2><div class="section-line"></div><div id="produtos-lista"></div></div>
+</div>
+
+<!-- CARRINHO -->
+<div id="page-carrinho" class="page">
+  <div class="section"><h2 class="section-title serif">Meu Pedido</h2><div class="section-line"></div><div id="carrinho-itens"></div><div id="carrinho-form"></div></div>
+</div>
+
+<!-- CUIDADOS -->
+<div id="page-cuidados" class="page">
+  <div class="section">
+    <h2 class="section-title serif">Nossos Cuidados</h2><div class="section-line"></div>
+    <div class="cuidados-grid">
+      <div class="cuidado-card"><div class="cuidado-icon">🌾</div><div class="cuidado-titulo serif">Sem Farinha de Trigo</div><div class="cuidado-desc">Utilizamos farinhas alternativas de alta qualidade em todas as nossas receitas.</div></div>
+      <div class="cuidado-card"><div class="cuidado-icon">🌱</div><div class="cuidado-titulo serif">Sem Leite Animal</div><div class="cuidado-desc">Nosso leite vegetal é produzido artesanalmente, com maior teor de oleaginosas e sem conservantes.</div></div>
+      <div class="cuidado-card"><div class="cuidado-icon">🍯</div><div class="cuidado-titulo serif">Sem Açúcar Branco</div><div class="cuidado-desc">Adoçamos com adoçantes naturais, com a doçura natural das próprias frutas ou com açúcares mais naturais e ricos em fibras, como o açúcar de coco. Se preferir a versão zero adição de açúcar de qualquer produto, é só pedir!</div></div>
+      <div class="cuidado-card"><div class="cuidado-icon">🍫</div><div class="cuidado-titulo serif">Chocolate Vegano</div><div class="cuidado-desc">Meio amargo, zero açúcar, sem leite e sem glúten. Sem corantes artificiais.</div></div>
+      <div class="cuidado-card"><div class="cuidado-icon">🫙</div><div class="cuidado-titulo serif">Extrato Natural</div><div class="cuidado-desc">Extrato de baunilha natural, feito a partir da própria fava.</div></div>
+      <div class="cuidado-card"><div class="cuidado-icon">🥗</div><div class="cuidado-titulo serif">Sem Óleos Refinados</div><div class="cuidado-desc">Não utilizamos óleos refinados comuns, como óleo de soja.</div></div>
+    </div>
+    <div class="alergia-box">⚠️ <strong>Informação importante sobre alergias:</strong> Apesar de nossos doces serem preparados sem trigo e sem leite animal, a produção é realizada em ambiente artesanal. Pode ocorrer contaminação cruzada. Não recomendamos para pessoas com alergias severas ao glúten ou à lactose.</div>
+  </div>
+</div>
+
+<!-- CONTATO -->
+<div id="page-contato" class="page">
+  <div class="section">
+    <h2 class="section-title serif">Contato & Retirada</h2><div class="section-line"></div>
+    <div class="contato-grid">
+      <div class="contato-card">
+        <h3 class="serif">Local de Retirada</h3>
+        <div class="contato-linha"><span class="contato-icon">📍</span><span>Rua Pinheiro Machado, 514<br>Bairro Vila Nova · Carlos Barbosa – RS</span></div>
+        <div class="contato-linha"><span class="contato-icon">📱</span><span>+55 54 99151-2886</span></div>
+        <div class="contato-linha"><span class="contato-icon">📸</span><a href="https://www.instagram.com/anachies.fit" target="_blank" style="color:var(--dourado);text-decoration:none;">@anachies.fit</a></div>
+        <div style="margin-top:16px;"><button class="btn-primary" onclick="abrirWhats('Olá! Quero informações sobre a Ana Chies Confeitaria')">Falar no WhatsApp</button></div>
+      </div>
+      <div class="contato-card">
+        <h3 class="serif">Formas de Pagamento</h3>
+        <div class="contato-linha"><span class="contato-icon">💚</span><span>Pix · <small style="color:var(--dourado)">Chave: 04452047025</small></span></div>
+        <div class="contato-linha"><span class="contato-icon">💵</span><span>Dinheiro</span></div>
+        <div style="background:var(--offwhite2);border-left:3px solid var(--dourado);padding:12px 14px;margin-top:16px;font-size:12px;color:var(--texto-medio);line-height:1.7;">Após o pagamento via Pix, envie o comprovante no WhatsApp para confirmação do pedido.</div>
+        <div style="margin-top:16px;background:var(--verde);color:white;padding:12px 14px;font-size:12px;line-height:1.7;"><strong>Pedidos sob encomenda</strong><br>Prazo mínimo: 1 dia de antecedência.<br>Para pronta entrega, consulte no WhatsApp.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="page-admin" class="page">
+  <div class="admin-header"><h2 class="serif">Painel Administrativo</h2><button class="admin-btn" onclick="logout()">Sair</button></div>
+  <div style="max-width:860px;margin:0 auto;padding:0 2rem 60px;">
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="adminTab('produtos',this)">Produtos</button>
+      <button class="admin-tab" onclick="adminTab('pedidos',this)">Pedidos</button>
+      <button class="admin-tab" onclick="adminTab('avisos',this)">Avisos</button>
+    </div>
+    <div class="admin-content active" id="admin-produtos">
+      <div class="novo-produto-form">
+        <div class="form-title serif">Adicionar Novo Produto</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Nome do produto</label><input type="text" id="novo-nome" placeholder="Ex: Brownie de Cacau"></div>
+          <div class="form-group"><label>Preço (R$)</label><input type="number" id="novo-preco" placeholder="0.00" step="0.01"></div>
+          <div class="form-group"><label>Categoria</label>
+            <select id="novo-cat">
+              <option>Cookies</option><option>Brownie</option><option>Muffins</option>
+              <option>Bolos Tradicionais</option><option>Bolos Três Camadas</option>
+              <option>Matilda no Pote</option><option>Especiais</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Vegano?</label><select id="novo-vegano"><option value="nao">Não</option><option value="sim">Sim</option></select></div>
+          <div class="form-group full"><label>Descrição</label><textarea id="novo-desc" placeholder="Descreva os ingredientes e diferenciais..."></textarea></div>
+          <div class="form-group full">
+            <label>Foto do produto</label>
+            <div class="upload-area">
+              <input type="file" accept="image/*" onchange="previewNovaFoto(event)">
+              <div class="upload-icon">📷</div>
+              <div class="upload-label">Clique para escolher uma foto do seu computador</div>
+              <div style="font-size:11px;color:var(--marrom-claro);margin-top:4px;">JPG, PNG · Recomendado: 600×600px</div>
+            </div>
+            <img id="novo-preview" class="upload-preview" style="display:none;">
+          </div>
+        </div>
+        <button class="btn-primary" style="margin-top:16px;" onclick="adicionarProduto()">+ Adicionar ao Cardápio</button>
+      </div>
+      <div id="lista-admin-produtos"></div>
+    </div>
+    <div class="admin-content" id="admin-pedidos"><div id="lista-pedidos"></div></div>
+    <div class="admin-content" id="admin-avisos">
+      <div class="form-section">
+        <div class="form-title serif">Aviso no Topo do Site</div>
+        <div class="form-group" style="margin-bottom:16px;"><label>Texto do aviso</label><input type="text" id="aviso-texto" placeholder="Ex: Novidade: Cheesecake vegano disponível!"></div>
+        <button class="btn-primary" onclick="salvarAviso()">Salvar Aviso</button>
+      </div>
+      <div class="form-section">
+        <div class="form-title serif">Informações de Contato</div>
+        <div class="form-grid">
+          <div class="form-group"><label>WhatsApp</label><input type="text" id="cfg-whats" value="+55 54 991512886"></div>
+          <div class="form-group"><label>Chave Pix</label><input type="text" id="cfg-pix" value="04452047025"></div>
+          <div class="form-group full"><label>Endereço</label><input type="text" id="cfg-end" value="Rua Pinheiro Machado, 514, Bairro Vila Nova, Carlos Barbosa – RS"></div>
+        </div>
+        <button class="btn-primary" style="margin-top:16px;" onclick="showToast('Configurações salvas!')">Salvar Configurações</button>
+        <p style="font-size:11px;color:var(--texto-medio);margin-top:12px;">* Firebase: integração em breve — produtos e pedidos ficam salvos na nuvem em tempo real.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="carrinho-float" id="carrinhoFloat" onclick="showPage('carrinho')" style="display:none;">
+  🛍 Meu pedido <span class="carrinho-count" id="carrinhoCount">0</span>
+</div>
+
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-modal">
+    <h2 class="serif">Área Restrita</h2>
+    <p>Acesso exclusivo · Ana Chies</p>
+    <input type="password" id="adminSenha" placeholder="Digite sua senha" onkeypress="if(event.key==='Enter')loginAdmin()">
+    <div class="admin-erro" id="adminErro"></div>
+    <button class="btn-primary" style="width:100%;margin-top:4px;" onclick="loginAdmin()">Entrar</button>
+    <button onclick="fecharAdmin()" style="background:none;border:none;color:rgba(249,245,239,0.4);font-size:12px;cursor:pointer;margin-top:16px;font-family:'Jost',sans-serif;">Cancelar</button>
+  </div>
+</div>
+
+<div class="edit-modal-overlay" id="editOverlay">
+  <div class="edit-modal">
+    <h3 class="serif">Editar Produto</h3>
+    <div class="edit-modal-grupo"><label>Nome</label><input type="text" id="edit-nome"></div>
+    <div class="edit-modal-grupo"><label>Preço (R$)</label><input type="number" id="edit-preco" step="0.01"></div>
+    <div class="edit-modal-grupo"><label>Categoria</label>
+      <select id="edit-cat">
+        <option>Cookies</option><option>Brownie</option><option>Muffins</option>
+        <option>Bolos Tradicionais</option><option>Bolos Três Camadas</option>
+        <option>Matilda no Pote</option><option>Especiais</option>
+      </select>
+    </div>
+    <div class="edit-modal-grupo"><label>Vegano?</label><select id="edit-vegano"><option value="nao">Não</option><option value="sim">Sim</option></select></div>
+    <div class="edit-modal-grupo"><label>Descrição</label><textarea id="edit-desc"></textarea></div>
+    <div class="edit-modal-grupo">
+      <label>Foto do produto</label>
+      <div class="upload-area">
+        <input type="file" accept="image/*" onchange="previewEditFoto(event)">
+        <div class="upload-icon">📷</div>
+        <div class="upload-label">Clique para trocar a foto</div>
+      </div>
+      <img id="edit-preview" class="upload-preview" style="display:none;">
+    </div>
+    <div class="edit-modal-actions">
+      <button class="btn-primary" onclick="salvarEdicao()">Salvar</button>
+      <button class="btn-outline" style="color:var(--marrom);border-color:var(--borda);" onclick="fecharEditModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-logo serif">Ana Chies</div>
+  <a class="footer-insta" href="https://www.instagram.com/anachies.fit" target="_blank">@anachies.fit</a>
+  <p>Pedidos sob encomenda · Carlos Barbosa – RS · +55 54 99151-2886</p>
+</footer>
+
+<script>
+const ADMIN_SENHA = 'anachies2025';
+let novaFotoBase64 = null;
+let editFotoBase64 = null;
+let editandoId = null;
+let ultimoId = 20;
+let pedidos = [  ,{id:17,nome:'Paçoca Zero Adição de Açúcar',preco:6.00,cat:'Especiais',desc:'Paçoca artesanal zero adição de açúcar, feita para quem não pode consumir adoçantes. Adoçada apenas com a doçura natural dos ingredientes. Saborosa e com toda a nossa essência.',vegano:'sim',foto:null,adicionais:[]}
+];
+let carrinho = [];
+let pagSelecionado = 'pix';
+
+let produtos = [
+  {id:1,nome:'Cookie Americano',preco:6.00,cat:'Cookies',desc:'Cookie clássico com gotas de chocolate 70%, crocante por fora e macio por dentro.',vegano:'nao',foto:null,adicionais:[]},
+  {id:2,nome:'Cookie de Cacau',preco:4.00,cat:'Cookies',desc:'Cookie de cacau puro, levemente adoçado com adoçante natural. Sem glúten e sem açúcar branco.',vegano:'sim',foto:null,adicionais:[]},
+  {id:3,nome:'Cookie Vegano',preco:4.00,cat:'Cookies',desc:'Cookie 100% vegano, sem leite animal e sem ovos. Sabor irresistível com ingredientes limpos.',vegano:'sim',foto:null,adicionais:[]},
+  {id:4,nome:'Brownie Tradicional Funcional',preco:14.00,cat:'Brownie',desc:'Brownie denso e intenso de chocolate, adoçado com açúcar de coco. Sem farinha de trigo e sem açúcar branco. Prefere a versão zero adição de açúcar? É só pedir!',vegano:'nao',foto:null,adicionais:[{id:'brig',nome:'+ Brigadeiro Rosa',preco:2.00,desc:'Brigadeiro de frutas vermelhas, sem açúcar branco.',vegano:'sim'}]},
+  {id:7,nome:'Muffin de Maçã com Especiarias',preco:7.50,cat:'Muffins',desc:'Adoçado apenas com a doçura natural da maçã. Acompanha pedacinhos de nozes.',vegano:'nao',foto:null,adicionais:[]},
+  {id:8,nome:'Muffin de Banana com Mirtilo',preco:6.50,cat:'Muffins',desc:'Adoçado com banana madura e mirtilo fresco. Acompanha pedacinhos de nozes.',vegano:'nao',foto:null,adicionais:[]},
+  {id:9,nome:'Bolo de Cenoura com Ganache',preco:64.00,cat:'Bolos Tradicionais',desc:'Bolo tradicional funcional de cenoura com ganache de chocolate vegano. Versão vegana: R$ 68,00.',vegano:'nao',foto:null,adicionais:[]},
+  {id:10,nome:'Bolo de Banana com Mirtilos',preco:40.00,cat:'Bolos Tradicionais',desc:'Adoçado com a própria fruta, sem adição de açúcar. Levinho e saboroso.',vegano:'sim',foto:null,adicionais:[]},
+  {id:11,nome:'Bolo de Maçã com Especiarias',preco:55.00,cat:'Bolos Tradicionais',desc:'Adoçado com a própria fruta e perfumado com especiarias naturais.',vegano:'sim',foto:null,adicionais:[]},
+  {id:12,nome:'Bolo de Abacaxi com Coco',preco:95.00,cat:'Bolos Três Camadas',desc:'Bolo três camadas com recheio de abacaxi e cobertura de coco fresco.',vegano:'nao',foto:null,adicionais:[]},
+  {id:13,nome:'Bolo de Brigadeiro Rosa com Frutas Vermelhas',preco:85.00,cat:'Bolos Três Camadas',desc:'Bolo três camadas com brigadeiro de frutas vermelhas. Visual deslumbrante.',vegano:'sim',foto:null,adicionais:[]},
+  {id:14,nome:'Matilda no Pote',preco:22.00,cat:'Matilda no Pote',desc:'O bolo de chocolate funcional da Ana Chies em um pote individual. Zero adição de açúcar — adoçado apenas com a doçura natural dos ingredientes. Prático, delicioso e cheio de propósito.',vegano:'nao',foto:null,adicionais:[{id:'calda',nome:'+ Calda Extra',preco:15.00,desc:'Calda artesanal para acompanhar o bolo de pote.',vegano:'sim'}]},
+  {id:16,nome:'Brownie no Pote',preco:30.00,cat:'Matilda no Pote',desc:'Brownie funcional servido em pote individual. Adoçado com açúcar de coco — prefere sem adição de açúcar? É só pedir a versão zero! Rico, cremoso e irresistível.',vegano:'nao',foto:null,adicionais:[{id:'calda-brownie',nome:'+ Calda Extra',preco:15.00,desc:'Calda artesanal para acompanhar o brownie de pote.',vegano:'sim'}]},
+];
+
+function showPage(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  if(p==='cardapio') renderCardapio();
+  if(p==='carrinho') renderCarrinho();
+  if(p==='admin'){renderAdminProdutos();renderAdminPedidos();}
+  window.scrollTo(0,0);
+}
+
+function renderCardapio(){
+  const ordem=['Cookies','Brownie','Muffins','Bolos Tradicionais','Bolos Três Camadas','Matilda no Pote','Especiais'];
+  const cats=ordem.filter(c=>produtos.some(p=>p.cat===c));
+  let html='';
+  cats.forEach(cat=>{
+    const isEspecial = cat === 'Especiais';
+    const prods=produtos.filter(p=>p.cat===cat);
+    if(isEspecial){
+      html+=`<div class="categoria-bloco">
+        <div style="background:linear-gradient(135deg,var(--marrom-escuro),var(--verde));padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:20px;">✨</span>
+          <div>
+            <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dourado-claro);margin-bottom:2px;">Edição Limitada</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:24px;color:white;font-weight:300;">Produtos Especiais</div>
+          </div>
+        </div>
+        <div class="produtos-grid">`;
+    } else {
+      html+=\`<div class="categoria-bloco"><div class="categoria-titulo serif">\${cat}</div><div class="produtos-grid">\`;
+    }
+    prods.forEach(prod=>{
+      let adicionaisHtml = '';
+      if(prod.adicionais && prod.adicionais.length > 0){
+        adicionaisHtml = '<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--borda);">';
+        prod.adicionais.forEach(ad=>{
+          adicionaisHtml += `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <div>
+              <div style="font-size:12px;font-weight:500;color:var(--marrom);">${ad.nome} ${ad.vegano==='sim'?'<span style=\'background:var(--verde);color:white;font-size:9px;padding:2px 6px;\'>Vegano</span>':''}</div>
+              <div style="font-size:11px;color:var(--texto-medio);">${ad.desc}</div>
+            </div>
+            <button onclick="event.stopPropagation();addAdicionalCarrinho(${prod.id},'${ad.id}')" style="background:var(--verde);color:white;border:none;padding:5px 10px;font-size:10px;letter-spacing:1px;cursor:pointer;font-family:'Jost',sans-serif;white-space:nowrap;margin-left:8px;">+ R$ ${ad.preco.toFixed(2).replace('.',',')}</button>
+          </div>`;
+        });
+        adicionaisHtml += '</div>';
+      }
+      html+=`<div class="produto-card">
+        ${prod.vegano==='sim'?'<span class="vegano-badge">Vegano</span>':''}
+        ${prod.foto?`<img src="${prod.foto}" class="produto-foto" alt="${prod.nome}">`:`<div class="produto-foto-placeholder">🍫</div>`}
+        <div class="produto-info">
+          <div class="produto-nome serif">${prod.nome}</div>
+          <div class="produto-desc">${prod.desc}</div>
+          <div class="produto-bottom">
+            <div class="produto-preco serif"><span>R$ </span>${prod.preco.toFixed(2).replace('.',',')}</div>
+            <button class="adicionar-btn" onclick="addCarrinho(${prod.id})">+ Adicionar</button>
+          </div>
+          ${adicionaisHtml}
+        </div>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  });
+  document.getElementById('produtos-lista').innerHTML=html;
+}
+
+function addCarrinho(id){
+  const prod=produtos.find(p=>p.id===id);
+  const ex=carrinho.find(c=>c.id===id);
+  if(ex) ex.qty++;
+  else carrinho.push({...prod,qty:1});
+  atualizarFloat();
+  showToast(`"${prod.nome}" adicionado!`);
+}
+
+function addAdicionalCarrinho(prodId, adId){
+  const prod = produtos.find(p=>p.id===prodId);
+  const ad = prod.adicionais.find(a=>a.id===adId);
+  const key = `adicional-${prodId}-${adId}`;
+  const ex = carrinho.find(c=>c.id===key);
+  if(ex) ex.qty++;
+  else carrinho.push({id:key, nome:`${ad.nome} (${prod.nome})`, preco:ad.preco, qty:1, foto:null});
+  atualizarFloat();
+  showToast(`"${ad.nome}" adicionado!`);
+}
+
+function atualizarFloat(){
+  const total=carrinho.reduce((s,c)=>s+c.qty,0);
+  document.getElementById('carrinhoCount').textContent=total;
+  document.getElementById('carrinhoFloat').style.display=total>0?'flex':'none';
+}
+
+function renderCarrinho(){
+  if(!carrinho.length){
+    document.getElementById('carrinho-itens').innerHTML=`<div style="text-align:center;padding:60px 0;color:var(--texto-medio);"><div style="font-size:40px;margin-bottom:16px;">🛍</div><p style="font-family:'Cormorant Garamond',serif;font-size:22px;margin-bottom:16px;">Seu pedido está vazio</p><button class="btn-primary" onclick="showPage('cardapio')">Ver Cardápio</button></div>`;
+    document.getElementById('carrinho-form').innerHTML='';
+    return;
+  }
+  let total=0,html='';
+  carrinho.forEach(item=>{
+    const sub=item.preco*item.qty; total+=sub;
+    html+=`<div class="carrinho-item">
+      ${item.foto?`<img src="${item.foto}" class="carrinho-item-foto" alt="">`:`<div class="carrinho-item-foto-ph">🍫</div>`}
+      <div class="carrinho-item-info">
+        <div class="carrinho-item-nome serif">${item.nome}</div>
+        <div class="carrinho-item-preco">R$ ${item.preco.toFixed(2).replace('.',',')} cada</div>
+      </div>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="mudarQty(${item.id},-1)">−</button>
+        <span style="font-size:15px;min-width:20px;text-align:center;">${item.qty}</span>
+        <button class="qty-btn" onclick="mudarQty(${item.id},1)">+</button>
+      </div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--marrom);min-width:70px;text-align:right;">R$ ${sub.toFixed(2).replace('.',',')}</div>
+      <button class="remover-btn" onclick="removerItem(${item.id})">✕</button>
+    </div>`;
+  });
+  html+=`<div class="total-bar"><span class="total-label serif">Total do pedido</span><span class="total-valor serif">R$ ${total.toFixed(2).replace('.',',')}</span></div>`;
+  document.getElementById('carrinho-itens').innerHTML=html;
+  const amanha=new Date(); amanha.setDate(amanha.getDate()+1);
+  const dataMin=amanha.toISOString().split('T')[0];
+  document.getElementById('carrinho-form').innerHTML=`
+    <div class="prazo-aviso">⏱ Prazo mínimo: 1 dia de antecedência. Para produto do dia, consulte no WhatsApp.</div>
+    <div class="form-section">
+      <div class="form-title serif">Seus dados</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Nome completo</label><input type="text" id="cli-nome" placeholder="Seu nome"></div>
+        <div class="form-group"><label>WhatsApp</label><input type="text" id="cli-fone" placeholder="(54) 99999-9999"></div>
+        <div class="form-group"><label>Data de retirada</label><input type="date" id="cli-data" min="${dataMin}" value="${dataMin}"></div>
+        <div class="form-group"><label>Horário preferido</label><select id="cli-hora"><option>Manhã (8h–12h)</option><option>Tarde (13h–18h)</option><option>Combinar via WhatsApp</option></select></div>
+        <div class="form-group full"><label>Observações</label><textarea id="cli-obs" placeholder="Alergias, variações, pedidos especiais..."></textarea></div>
+      </div>
+    </div>
+    <div class="form-section">
+      <div class="form-title serif">Forma de pagamento</div>
+      <div class="info-box">💚 <strong>Pix:</strong> Chave 04452047025 · Após pagamento, envie o comprovante no WhatsApp.<br>💵 <strong>Dinheiro:</strong> Pagamento na retirada.</div>
+      <div class="pagamento-opcoes">
+        <div class="pag-opt selected" id="pag-pix" onclick="selPag('pix')">💚 Pix</div>
+        <div class="pag-opt" id="pag-dinheiro" onclick="selPag('dinheiro')">💵 Dinheiro</div>
+      </div>
+    </div>
+    <button class="btn-primary" style="width:100%;padding:16px;font-size:14px;letter-spacing:2px;" onclick="finalizarPedido()">Finalizar Pedido via WhatsApp</button>
+    <button class="btn-outline" style="width:100%;margin-top:12px;color:var(--marrom);border-color:var(--borda);" onclick="showPage('cardapio')">← Continuar comprando</button>`;
+}
+
+function selPag(p){
+  pagSelecionado=p;
+  document.querySelectorAll('.pag-opt').forEach(el=>el.classList.remove('selected'));
+  document.getElementById('pag-'+p).classList.add('selected');
+}
+function mudarQty(id,d){const i=carrinho.findIndex(c=>c.id===id);carrinho[i].qty+=d;if(carrinho[i].qty<=0)carrinho.splice(i,1);atualizarFloat();renderCarrinho();}
+function removerItem(id){carrinho=carrinho.filter(c=>c.id!==id);atualizarFloat();renderCarrinho();}
+
+function finalizarPedido(){
+  const nome=document.getElementById('cli-nome').value.trim();
+  const fone=document.getElementById('cli-fone').value.trim();
+  const data=document.getElementById('cli-data').value;
+  const hora=document.getElementById('cli-hora').value;
+  const obs=document.getElementById('cli-obs').value.trim();
+  if(!nome||!fone||!data){showToast('Preencha nome, WhatsApp e data!');return;}
+  const dataFmt=new Date(data+'T12:00:00').toLocaleDateString('pt-BR');
+  let msg=`🌿 *Pedido Ana Chies Confeitaria*\n\n👤 *Cliente:* ${nome}\n📱 *WhatsApp:* ${fone}\n📅 *Retirada:* ${dataFmt} — ${hora}\n💳 *Pagamento:* ${pagSelecionado==='pix'?'Pix':'Dinheiro'}\n\n🛍 *Itens do pedido:*\n`;
+  let total=0;
+  carrinho.forEach(i=>{const s=i.preco*i.qty;total+=s;msg+=`• ${i.nome} x${i.qty} — R$ ${s.toFixed(2).replace('.',',')}\n`;});
+  msg+=`\n💰 *Total: R$ ${total.toFixed(2).replace('.',',')}*`;
+  if(obs) msg+=`\n\n📝 *Obs:* ${obs}`;
+  if(pagSelecionado==='pix') msg+=`\n\n🔑 Chave Pix: 04452047025\nPor favor, envie o comprovante após o pagamento! 💚`;
+  pedidos.push({id:Date.now(),nome,fone,data,hora,obs,itens:[...carrinho],total,pagamento:pagSelecionado,status:'pendente',criado:new Date().toLocaleString('pt-BR')});
+  window.open(`https://wa.me/5554991512886?text=${encodeURIComponent(msg)}`,'_blank');
+  carrinho=[];atualizarFloat();showPage('home');
+  showToast('Pedido enviado! Aguarde confirmação no WhatsApp 💚');
+}
+
+function abrirAdmin(){document.getElementById('adminOverlay').classList.add('open');}
+function fecharAdmin(){document.getElementById('adminOverlay').classList.remove('open');document.getElementById('adminSenha').value='';document.getElementById('adminErro').textContent='';}
+function loginAdmin(){
+  if(document.getElementById('adminSenha').value===ADMIN_SENHA){fecharAdmin();showPage('admin');}
+  else document.getElementById('adminErro').textContent='Senha incorreta.';
+}
+function logout(){showPage('home');}
+
+function adminTab(tab,el){
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.admin-content').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('admin-'+tab).classList.add('active');
+}
+
+function previewNovaFoto(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{novaFotoBase64=ev.target.result;const img=document.getElementById('novo-preview');img.src=novaFotoBase64;img.style.display='block';};
+  reader.readAsDataURL(file);
+}
+
+function previewEditFoto(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{editFotoBase64=ev.target.result;const img=document.getElementById('edit-preview');img.src=editFotoBase64;img.style.display='block';};
+  reader.readAsDataURL(file);
+}
+
+function renderAdminProdutos(){
+  const ordem=['Cookies','Brownie','Muffins','Bolos Tradicionais','Bolos Três Camadas','Matilda no Pote','Especiais'];
+  const cats=ordem.filter(c=>produtos.some(p=>p.cat===c));
+  let html='';
+  cats.forEach(cat=>{
+    const prods=produtos.filter(p=>p.cat===cat);
+    if(!prods.length)return;
+    html+=`<div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--marrom);margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--borda);">${cat}</div>`;
+    prods.forEach(prod=>{
+      html+=`<div class="produto-admin-card">
+        ${prod.foto?`<img src="${prod.foto}" class="produto-admin-foto" alt="">`:`<div class="produto-admin-foto-ph">🍫</div>`}
+        <div class="produto-admin-info">
+          <div class="produto-admin-nome serif">${prod.nome}</div>
+          <div class="produto-admin-cat">${prod.cat}${prod.vegano==='sim'?' · Vegano':''}</div>
+          <div style="font-size:11px;color:var(--texto-medio);margin-top:3px;">${prod.desc.substring(0,55)}...</div>
+        </div>
+        <div class="produto-admin-preco serif">R$ ${prod.preco.toFixed(2).replace('.',',')}</div>
+        <button class="edit-btn" onclick="abrirEdit(${prod.id})">Editar</button>
+        <button class="del-btn" onclick="deletarProduto(${prod.id})">✕</button>
+      </div>`;
+    });
+  });
+  document.getElementById('lista-admin-produtos').innerHTML=html;
+}
+
+function adicionarProduto(){
+  const nome=document.getElementById('novo-nome').value.trim();
+  const preco=parseFloat(document.getElementById('novo-preco').value);
+  const cat=document.getElementById('novo-cat').value;
+  const desc=document.getElementById('novo-desc').value.trim();
+  const vegano=document.getElementById('novo-vegano').value;
+  if(!nome||!preco){showToast('Preencha nome e preço!');return;}
+  ultimoId++;
+  produtos.push({id:ultimoId,nome,preco,cat,desc,vegano,foto:novaFotoBase64});
+  document.getElementById('novo-nome').value='';
+  document.getElementById('novo-preco').value='';
+  document.getElementById('novo-desc').value='';
+  document.getElementById('novo-preview').style.display='none';
+  novaFotoBase64=null;
+  renderAdminProdutos();
+  showToast(`"${nome}" adicionado ao cardápio!`);
+}
+
+function deletarProduto(id){
+  if(confirm('Remover este produto?')){produtos=produtos.filter(p=>p.id!==id);renderAdminProdutos();showToast('Produto removido.');}
+}
+
+function abrirEdit(id){
+  editandoId=id;editFotoBase64=null;
+  const prod=produtos.find(p=>p.id===id);
+  document.getElementById('edit-nome').value=prod.nome;
+  document.getElementById('edit-preco').value=prod.preco;
+  document.getElementById('edit-cat').value=prod.cat;
+  document.getElementById('edit-vegano').value=prod.vegano;
+  document.getElementById('edit-desc').value=prod.desc;
+  const prev=document.getElementById('edit-preview');
+  if(prod.foto){prev.src=prod.foto;prev.style.display='block';}else prev.style.display='none';
+  document.getElementById('editOverlay').classList.add('open');
+}
+
+function fecharEditModal(){document.getElementById('editOverlay').classList.remove('open');}
+
+function salvarEdicao(){
+  const prod=produtos.find(p=>p.id===editandoId);
+  prod.nome=document.getElementById('edit-nome').value.trim();
+  prod.preco=parseFloat(document.getElementById('edit-preco').value);
+  prod.cat=document.getElementById('edit-cat').value;
+  prod.vegano=document.getElementById('edit-vegano').value;
+  prod.desc=document.getElementById('edit-desc').value.trim();
+  if(editFotoBase64) prod.foto=editFotoBase64;
+  fecharEditModal();renderAdminProdutos();
+  showToast('Produto atualizado!');
+}
+
+function renderAdminPedidos(){
+  if(!pedidos.length){document.getElementById('lista-pedidos').innerHTML=`<div style="text-align:center;padding:40px;color:var(--texto-medio);font-family:'Cormorant Garamond',serif;font-size:20px;">Nenhum pedido ainda.</div>`;return;}
+  let html='';
+  [...pedidos].reverse().forEach(p=>{
+    const itensStr=p.itens.map(i=>`${i.nome} x${i.qty}`).join(', ');
+    const dataFmt=new Date(p.data+'T12:00:00').toLocaleDateString('pt-BR');
+    html+=`<div class="pedido-card">
+      <div class="pedido-header">
+        <div><div class="pedido-nome serif">${p.nome}</div><div style="font-size:12px;color:var(--texto-medio);">${p.fone}</div></div>
+        <span class="pedido-status ${p.status==='confirmado'?'status-confirmado':'status-pendente'}">${p.status}</span>
+      </div>
+      <div class="pedido-itens">${itensStr}</div>
+      <div class="pedido-data">📅 ${dataFmt} — ${p.hora} · 💳 ${p.pagamento==='pix'?'Pix':'Dinheiro'}</div>
+      <div style="font-weight:500;color:var(--marrom);margin-bottom:12px;">Total: R$ ${p.total.toFixed(2).replace('.',',')} · ${p.criado}</div>
+      ${p.status!=='confirmado'?`<button class="confirmar-btn" onclick="confirmarPedido(${p.id})">✓ Confirmar Pedido</button>`:''}
+      <button onclick="abrirWhats('Olá ${p.nome}! Seu pedido foi confirmado para ${dataFmt} 💚')" style="background:var(--dourado);border:none;color:var(--marrom-escuro);padding:8px 16px;font-size:11px;cursor:pointer;font-family:Jost,sans-serif;letter-spacing:1px;text-transform:uppercase;">Avisar Cliente</button>
+    </div>`;
+  });
+  document.getElementById('lista-pedidos').innerHTML=html;
+}
+
+function confirmarPedido(id){const p=pedidos.find(p=>p.id===id);if(p)p.status='confirmado';renderAdminPedidos();showToast('Pedido confirmado!');}
+
+function salvarAviso(){
+  const txt=document.getElementById('aviso-texto').value.trim();
+  if(txt){document.getElementById('aviso-bar').innerHTML=`✦ <span>${txt}</span> ✦`;showToast('Aviso atualizado!');}
+}
+
+function abrirWhats(msg){window.open(`https://wa.me/5554991512886?text=${encodeURIComponent(msg)}`,'_blank');}
+
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+renderCardapio();
+</script>
+</body>
+</html>
